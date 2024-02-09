@@ -1,3 +1,6 @@
+const assignButton = document.querySelector(".assign");
+const assignedItems = document.querySelector("assigned-items");
+
 // Find the button with class "invite"
 const addGuestButton = document.querySelector(".invite");
 
@@ -25,10 +28,10 @@ addGuestButton.addEventListener("click", function () {
   if (guest !== "") {
     // If not empty, add the guest to the list
     addToList(guest);
-    
+
     // Update the guest count
     updateGuestCount();
-    
+
     // Clear the input box after adding the guest
     clearInput();
   }
@@ -55,7 +58,7 @@ const addToList = function (guest) {
 const updateGuestCount = function () {
   // Get all the list items in the guest list
   const guests = document.querySelectorAll(".guest-list li");
-  
+
   // Update the guest count displayed
   guestCount.innerText = guests.length;
 
@@ -68,4 +71,57 @@ const updateGuestCount = function () {
   }
 };
 
+// Function to assign potluck items to guests
+const assignItems = function () {
+  // List of available potluck items
+  const potluckItems = [
+    "cheese",
+    "crackers",
+    "fresh fruit",
+    "coleslaw",
+    "apple cake",
+    "gazpacho",
+    "baguette",
+    "egg salad",
+    "potato salad",
+    "summer rolls",
+    "hummus",
+    "cookies",
+  ];
 
+  // Get all the guest list items
+  const allGuests = document.querySelectorAll(".guest-list li");
+
+  // Loop through each guest
+  for (let guest of allGuests) {
+    // Generate a random index to select a potluck item
+    let randomPotluckIndex = Math.floor(Math.random() * potluckItems.length);
+
+    // Select a random potluck item using the random index
+    let randomPotluckItem = potluckItems[randomPotluckIndex];
+
+    // Create a new list item to display the assigned item for the guest
+    let listItem = document.createElement("li");
+
+    // Set the text of the list item to indicate what the guest is bringing
+    listItem.innerText = `${guest.innerText} is bringing ${randomPotluckItem}.`;
+
+    // Append the list item to the assigned items list
+    assignedItems.append(listItem);
+
+    // Remove the assigned potluck item from the list of available items to avoid duplication
+    potluckItems.splice(randomPotluckIndex, 1);
+  }
+};
+
+// Find the button that triggers the assignment of potluck items
+const assignButton = document.querySelector(".assign");
+
+// Add an event listener to the assign button
+assignButton.addEventListener("click", function () {
+  // Call the function to assign potluck items to guests
+  assignItems();
+
+  // Disable the assign button after it's clicked to prevent multiple assignments
+  assignButton.disabled = true;
+});
